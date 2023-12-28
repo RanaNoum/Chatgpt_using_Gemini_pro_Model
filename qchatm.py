@@ -4,7 +4,7 @@ from db import insert_chat_history
 import streamlit as st
 
 import os
-from app import *
+
 import google.generativeai as genai
 
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -17,6 +17,8 @@ def get_gemini_response(question):
     
     response=chat.send_message(question,stream=True)
     return response
+
+from app import *  # Import the code from 'app.py'
 
 ##initialize our streamlit app
 
@@ -43,14 +45,5 @@ if submit and input:
         response_text += chunk.text
         st.session_state['chat_history'].append(("Bot", chunk.text))
     insert_chat_history(user_input=input, model_response=response_text)
-st.subheader("The Chat History is")
-    
-for role, text in st.session_state['chat_history']:
-    st.write(f"{role}: {text}")
 
-
-    
-
-
-
-
+display_chat_history()  # Call the function from 'app.py' to display chat history
